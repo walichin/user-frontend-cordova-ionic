@@ -1,0 +1,37 @@
+      <ion-view view-title="Login">
+      
+        <ion-content class="padding">   
+          
+          <div class="list">        
+            
+            <img class="archive-login" ng-src="img/archive_login.jpg">
+            
+            <form name="formLogin" ng-submit="login(formLogin)" ng-controller="LoginCtrl">
+
+              <label class="item item-input">
+                <span class="input-label">Username</span>
+                <input type="text" maxlength="8" id="username" name="username" ng-change="clearError()" ng-model="username" required>        
+              </label>
+
+              <label class="item item-input">
+                <span class="input-label">Password</span>
+                <input type="password" maxlength="18" id="password" name="password" ng-change="clearError()" ng-model="password" required>
+              </label>
+
+              <button type="submit" ng-disabled="formLogin.$invalid" class="button button-block button-dark">
+                Sign In
+              </button>
+
+              <label class="item item-divider">
+                <div ng-show="error" class="alert alert-danger">{{error}}<br></div>
+                <span ng-show="formLogin.username.$dirty && formLogin.username.$error.required" class="help-block">Username is required<br></span>
+                <span ng-show="formLogin.password.$dirty && formLogin.password.$error.required" class="help-block">Password is required<br></span>
+              </label>
+      
+            </form>
+
+          </div>
+                
+        </ion-content>
+        
+      </ion-view>

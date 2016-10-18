@@ -1,0 +1,20 @@
+      <ion-view view-title="Users List">
+        <ion-content>
+          <ion-scroll zooming="true" direction="y" style="height: 500px">
+          <!--ion-scroll zooming="true" direction="y"-->
+            <ion-list>
+              <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="user in users" type="item-text-wrap" href="#/home/users/{{user.user_id}}">
+                <img ng-src="{{user.url_photo}}">
+                <h2>{{user.name}}</h2>
+                <p>{{user.login}}</p>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+
+    <!--             <ion-option-button class="button-assertive" ng-click="remove(user)">
+                  Delete
+                </ion-option-button>
+     -->            
+              </ion-item>
+            </ion-list>
+          </ion-scroll>
+        </ion-content>
+      </ion-view>

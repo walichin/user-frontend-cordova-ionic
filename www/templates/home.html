@@ -1,0 +1,51 @@
+      <ion-side-menus>
+
+        <ion-side-menu side="left">
+          <ion-header-bar class="bar-positive">
+            <h1 class="title">Menu</h1>
+          </ion-header-bar>
+          <ion-content>
+            <ul class="list">
+              
+              <a href="#/home/users" class="item item-icon-left item-icon-right" menu-close>
+                <i class="icon ion-person-stalker"></i>
+                Users List
+                <span class="badge badge-assertive">{{numUsers}}</span>
+              </a>
+
+              <a href="#/home/new-user" class="item item-icon-left item-icon-right" menu-close>
+                <i class="icon ion-person-add"></i>
+                New User
+                <i class="icon ion-chevron-right icon-accessory"></i>
+              </a>
+              
+              <a href="#/home/users" class="item item-icon-left item-icon-right" menu-close>
+                <i class="icon ion-locked"></i>
+                Change Password
+                <i class="icon ion-chevron-right icon-accessory"></i>
+              </a>
+              
+              <a href="#/login" ng-click="clearCredentials()" class="item item-icon-left item-icon-right" menu-close>
+                <i class="icon ion-log-out"></i>
+                <!--i class="icon md-log-out"></i-->
+                Logout
+                <i class="icon ion-chevron-right icon-accessory"></i>
+              </a>
+            
+            </ul>
+          </ion-content>
+        </ion-side-menu>
+
+        <ion-side-menu-content> 
+          <ion-nav-bar class="bar-positive">
+              <ion-nav-back-button>
+              </ion-nav-back-button>
+              <ion-nav-buttons side="left">
+                <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+                </button>
+              </ion-nav-buttons>
+          </ion-nav-bar>              
+          <ion-nav-view name="homeContent"></ion-nav-view>
+        </ion-side-menu-content>
+
+      </ion-side-menus>

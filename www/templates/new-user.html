@@ -1,0 +1,86 @@
+      <ion-view view-title="New User">
+      
+        <ion-content class="padding">
+
+          <ion-scroll zooming="true" direction="y" style="height: 500px">
+            
+            <div class="list">        
+              
+              <img class="archive-login" ng-src="{{user.url_photo}}">
+              
+              <form name="formUser" ng-submit="createUser(formUser)" ng-controller="NewUserCtrl">
+
+                <label class="item item-input">
+                  <span class="input-label">Name</span>
+                  <input type="text" maxlength="100" id="name" name="name" ng-change="clearError()" ng-model="user.name" required>        
+                </label>
+
+                <label class="item item-input">
+                  <span class="input-label">Username</span>
+                  <input type="text" maxlength="8" id="username" name="username" ng-change="clearError()" ng-model="user.login" required>        
+                </label>
+
+                <label class="item item-input">
+                  <span class="input-label">Password</span>
+                  <input type="password" maxlength="18" id="password" name="password" ng-change="clearError()" ng-model="user.password" required>
+                </label>
+
+                <label class="item item-input">              
+                  <span class="input-label">Email</span>
+                  <input type="email" name="email" maxlength="30" ng-model="user.email">        
+                </label>
+
+
+                <label class="item item-input item-toggle">
+                  <span class="input-label">Administrator</span>
+
+                   <label class="toggle toggle-assertive">
+                     <input type="checkbox" ng-change="setIsAdmin()" ng-checked="checked" ng-model="checked">
+                     <div class="track">
+                       <div class="handle"></div>
+                     </div>
+                   </label>
+                </label>
+
+
+                <label class="item item-input">
+                  <span class="input-label">GPS Location</span>
+                  <input type="text" maxlength="100" ng-model="user.gps_location">        
+                </label>
+
+                <label class="item item-input">
+                  <span class="input-label">GPS Latitude</span>
+                  <input type="text" maxlength="30" ng-model="user.gps_latitude">        
+                </label>
+
+                <label class="item item-input">
+                  <span class="input-label">GPS Longitude</span>
+                  <input type="text" maxlength="30" ng-model="user.gps_longitude">        
+                </label>
+
+                <label class="item item-input">
+                  <span class="input-label">Url Photo</span>
+                  <input type="text" maxlength="200" ng-model="user.url_photo">        
+                </label>
+
+                <button type="submit" ng-disabled="formUser.$invalid" class="button button-block button-dark">
+                  Create User
+                </button>
+
+                <label class="item item-divider">
+                  <div ng-show="error" class="alert alert-danger">{{error}}<br></div>
+                  <span ng-show="formUser.name.$dirty && formUser.name.$error.required" class="help-block">Name is required<br></span>
+                  <span ng-show="formUser.username.$dirty && formUser.username.$error.required" class="help-block">Username is required<br></span>
+                  <span ng-show="formUser.password.$dirty && formUser.password.$error.required" class="help-block">Password is required<br></span>
+                  <span ng-show="formUser.email.$dirty && formUser.email.$error.email" class="help-block">Email is not valid<br></span>
+                </label>
+        
+              </form>
+
+            </div>
+
+          </ion-scroll>
+                
+        </ion-content>
+        
+      </ion-view>
