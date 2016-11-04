@@ -182,8 +182,10 @@ ionicAppServices
                 //     "access-control-allow-headers": "content-type, accept"
                 // },
 
-                //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                headers: {"Content-Type":"application/x-www-form-urlencoded","Accept":"application/json, text/plain, */*","Authorization":"Basic "},
+                headers: {"Access-Control-Allow-Origin": "*","Content-Type": "application/x-www-form-urlencoded"},
+                //headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                
+                //headers: {"Content-Type":"application/x-www-form-urlencoded","Accept":"application/json, text/plain, */*","Authorization":"Basic "},
 
 				transformRequest: function(obj) {
 					var str = [];

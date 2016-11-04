@@ -1,0 +1,24 @@
+<ion-view view-title="Google Maps">
+
+  <ion-content class="padding">   
+    
+    <ion-scroll zooming="true" direction="y" style="height: 500px">
+
+      <div id="floating-panel">
+
+        <input id="address" type="textbox" ng-model="address">
+        <input id="submit" type="button" value="Geocode" ng-click="geocodeAddress(address)">
+        <br>
+        <input id="latitude" type="textbox" ng-model="latitude">
+        <br>
+        <input id="longitude" type="textbox" ng-model="longitude">
+      
+      </div>
+
+      <div id="map" data-tap-disabled="true"></div>
+      
+    </ion-scroll>
+          
+  </ion-content>
+  
+</ion-view>

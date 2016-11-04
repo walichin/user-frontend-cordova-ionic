@@ -14,6 +14,8 @@ angular.module('ionicApp', [
   //$rootScope.globals = $cookieStore.get('globals') || {};
   $rootScope.globals = $localstorage.getObject('globals') || {};
 
+  $rootScope.datamap = $localstorage.getObject('datamap') || {};
+
   if ($rootScope.globals.currentUser) {
       $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser.authdata; // jshint ignore:line
   }
@@ -68,6 +70,11 @@ angular.module('ionicApp', [
   // Each state's controller can be found in controllers.js
 
   $stateProvider
+    .state('map', {
+      url: "/map",
+      templateUrl: "templates/map.html",
+      controller: 'MapCtrl'
+    })
     .state('login', {
       url: "/login",
       templateUrl: "templates/login.html",

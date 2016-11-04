@@ -3,6 +3,99 @@ var ionicAppControllers = angular.module('ionicAppControllers', ['ionicAppServic
 ionicAppControllers
 
 
+.controller('MapCtrl', function($rootScope, $scope, $window, $localstorage) {
+  // With the new view caching in Ionic, Controllers are only called
+  // when they are recreated or on app start, instead of every page change.
+  // To listen for when this page is active (for example, to refresh data),
+  // listen for the $ionicView.enter event:
+  //
+  //$scope.$on('$ionicView.enter', function(e) {
+  //});
+
+
+  if (!$rootScope.datamap.address) {
+
+    $rootScope.datamap = {
+      address: "Sydney, NSW",
+      latitude: -34.397,
+      longitude: 150.644
+    };
+
+    $localstorage.setObject('datamap', $rootScope.datamap);
+
+  }
+
+
+
+  var initMap = function() {
+
+    $scope.map = new google.maps.Map($window.document.getElementById('map'), {
+
+      zoom: 8,
+      center: {lat: $rootScope.datamap.latitude, lng: $rootScope.datamap.longitude}
+
+    });
+    
+    $scope.geocoder = new google.maps.Geocoder();
+
+    $scope.address = $rootScope.datamap.address;
+    $scope.latitude = $rootScope.datamap.latitude;
+    $scope.longitude = $rootScope.datamap.longitude;
+   
+  };
+
+
+  //google.maps.event.addDomListener($window, 'load', initMap);
+
+
+  $scope.$on('$ionicView.enter', function(ev) {
+    
+    initMap();
+
+    // Here your code to run always (example: to refresh data)
+
+    if(ev.targetScope !== $scope) return;
+    // Here your code to run once
+
+  });
+
+
+  $scope.geocodeAddress = function(address) {
+
+    //var address = document.getElementById('address').value;
+
+    $scope.geocoder.geocode({'address': address}, function(results, status) {
+      
+      if (status === 'OK') {
+
+        $scope.map.setCenter(results[0].geometry.location);
+        
+        var marker = new google.maps.Marker({
+          map: $scope.map,
+          position: results[0].geometry.location
+        });
+
+        $scope.latitude = results[0].geometry.location.lat();
+        $scope.longitude = results[0].geometry.location.lng();
+
+        $rootScope.datamap = {
+          address: address,
+          latitude: results[0].geometry.location.lat(),
+          longitude: results[0].geometry.location.lng()
+        };
+
+        $localstorage.setObject('datamap', $rootScope.datamap);
+      
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  }
+
+})
+
+
+
 .controller('HomeCtrl', function($scope, $ionicSideMenuDelegate, $ionicModal, AuthenticationService, Users) {              
   
   $scope.$on('$ionicView.enter', function(ev) {
@@ -22,7 +115,7 @@ ionicAppControllers
   });
 
 
-  $ionicModal.fromTemplateUrl('modal.html', function (modal) {
+  $ionicModal.fromTemplateUrl('templates/modal.html', function (modal) {
     $scope.modal = modal;
   }, {
     animation: 'slide-in-up'
@@ -154,50 +247,71 @@ ionicAppControllers
 
 
 .controller('LoginCtrl',
-    ['$scope', '$window', '$rootScope', '$location', 'AuthenticationService', 'ENV', function ($scope, $window, $rootScope, $location, AuthenticationService, ENV) {
+  ['$scope', '$ionicSideMenuDelegate', '$ionicModal', '$window', '$rootScope', '$location', 'AuthenticationService', 'ENV', function ($scope, $ionicSideMenuDelegate, $ionicModal, $window, $rootScope, $location, AuthenticationService, ENV) {
 
 
-    if ($location.path() === '/login') AuthenticationService.ClearCredentials();
+  if ($location.path() === '/login') AuthenticationService.ClearCredentials();
 
-    $scope.clearError = function () {
-      $scope.error = "";
-    }
+  $scope.clearError = function () {
+    $scope.error = "";
+  }
 
-    $scope.login = function (form) {
-        //$scope.dataLoading = true;
+  $scope.login = function (form) {
+      //$scope.dataLoading = true;
 
-        console.log('$scope.username:' + $scope.username);;
+      console.log('$scope.username:' + $scope.username);;
 
-        AuthenticationService.Login($scope.username, $scope.password, function (response) {
-            if (response.code === '1') {
-                AuthenticationService.SetCredentials($scope.username, $scope.password);
-                $scope.username = "";
-                $scope.password = "";
-                $scope.error = "";
-                //$scope.dataLoading = false;
-                form.$setPristine();
-                $location.path('/home/users');
-            } else if (response.code === '0') {
-                //$scope.dataLoading = false;
-                $scope.username = "";
-                $scope.password = "";
-                $scope.error = "Username or password not valid";
-                form.$setPristine();
+      AuthenticationService.Login($scope.username, $scope.password, function (response) {
+          if (response.code === '1') {
+              AuthenticationService.SetCredentials($scope.username, $scope.password);
+              $scope.username = "";
+              $scope.password = "";
+              $scope.error = "";
+              //$scope.dataLoading = false;
+              form.$setPristine();
+              $location.path('/home/users');
+          } else if (response.code === '0') {
+              //$scope.dataLoading = false;
+              $scope.username = "";
+              $scope.password = "";
+              $scope.error = "Username or password not valid";
+              form.$setPristine();
 
-                var element = $window.document.getElementById("username");
-                element.focus();
-            } else {
-                //$scope.dataLoading = false;
-                $scope.username = "";
-                $scope.password = "";
-                $scope.error = response.code + "-" + response.message;
-                form.$setPristine();
+              var element = $window.document.getElementById("username");
+              element.focus();
+          } else {
+              //$scope.dataLoading = false;
+              $scope.username = "";
+              $scope.password = "";
+          
+              form.$setPristine();
 
-                var element = $window.document.getElementById("username");
-                element.focus();
-            }
-        });
-    };
+              var element = $window.document.getElementById("username");
+              element.focus();
+
+              //$scope.error = response.code + "-" + response.message;
+              $scope.message = response.code + "-" + response.message;
+              $scope.modal.show();
+
+          }
+      });
+  };
+
+
+  // $ionicModal.fromTemplateUrl('templates/modal.html', function (modal) {
+  //   $scope.modal = modal;
+  // }, {
+  //   animation: 'slide-in-up'
+  // });
+
+
+  $ionicModal.fromTemplateUrl('templates/modal.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
 
 }])
 
