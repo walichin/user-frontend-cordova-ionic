@@ -4,7 +4,6 @@ ionicAppControllers
 
 
 .controller('MapCtrl', function($rootScope, $scope, $window, $localstorage) {
-//.controller('MapCtrl', function($rootScope, $scope, $window, $localstorage) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -17,28 +16,17 @@ ionicAppControllers
   $scope.choice = "A";
   $scope.addressEnabled = true;
 
-
-  // $scope.addressEnabled = false;
-  // $scope.latitude = '';
-  // $scope.longitude = '';
-  // $scope.addressEnabled = true;
-  // $scope.googleaddress = '';
-
-
   $scope.setUpChoice = function(choice) {
 
     if (choice === "A") {
 
       this.latitude = '';
       this.longitude = '';
-      // $scope.latitude = '';
-      // $scope.longitude = '';
       $scope.addressEnabled = true;
     
     } else {
 
       this.googleaddress = '';
-      // $scope.googleaddress = '';
       $scope.addressEnabled = false;
     }
 
@@ -137,7 +125,6 @@ ionicAppControllers
       if (latitude && longitude) {
 
         var location = { lat: parseFloat(latitude), lng: parseFloat(longitude) };
-        // var location = { lat: latitude, lng: longitude };
 
         $scope.geocoder.geocode({'location': location}, function(results, status) {
           
@@ -151,14 +138,6 @@ ionicAppControllers
               map: $scope.map,
               position: results[0].geometry.location
             });
-
-            // var newAddress;
-
-            // if (results[1]) {
-            //   newAddress = results[0].formatted_address;
-            // } else {
-            //   newAddress = "No address found";
-            // }
 
             $scope.$apply(function() {
 
