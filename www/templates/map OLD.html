@@ -1,0 +1,36 @@
+<ion-view view-title="Google Maps">
+
+  <ion-content class="padding">   
+    
+    <ion-scroll zooming="true" direction="y" style="height: 500px">
+
+      <div id="floating-panel">
+
+
+        <ion-list radio-group>
+          <ion-item>
+            <ion-label>By address</ion-label>
+            <ion-radio ng-model="choice" ng-change="changeRadio(choice)" ng-value="'A'"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>By coordinates</ion-label>
+            <ion-radio ng-model="choice" ng-change="changeRadio(choice)" ng-value="'B'"></ion-radio>
+          </ion-item>
+        </ion-list>
+
+        <input id="address" ng-disabled="!addressEnabled" type="textbox" ng-model="address">
+        <input id="submit" type="button" value="Search" ng-click="search(choice, address, latitude, longitude)">
+        <br>
+        <input id="latitude" ng-disabled="addressEnabled" type="textbox" ng-model="latitude">
+        <br>
+        <input id="longitude" ng-disabled="addressEnabled" type="textbox" ng-model="longitude">
+      
+      </div>
+
+      <div id="map" data-tap-disabled="true"></div>
+      
+    </ion-scroll>
+          
+  </ion-content>
+  
+</ion-view>

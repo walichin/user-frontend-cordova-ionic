@@ -6,13 +6,52 @@
 
       <div id="floating-panel">
 
-        <input id="address" type="textbox" ng-model="address">
-        <input id="submit" type="button" value="Geocode" ng-click="geocodeAddress(address)">
-        <br>
-        <input id="latitude" type="textbox" ng-model="latitude">
-        <br>
-        <input id="longitude" type="textbox" ng-model="longitude">
-      
+        <div style="background-color:#4992E2;">
+
+              <label class="radio-inline"><input type="radio" name="optradio" ng-model="choice" ng-change="changeRadio(choice)" ng-value="'A'">By address</label>
+              <label class="radio-inline"><input type="radio" name="optradio" ng-model="choice" ng-change="changeRadio(choice)" ng-value="'B'">By coordinates</label>
+
+              <div class="row">
+                <div align="left" class="col">
+                  <strong>Address: </strong> 
+                </div>
+                <div align="left" class="col">
+                  <input id="address" ng-disabled="!addressEnabled" type="textbox" ng-model="address">
+                </div>
+              </div>
+     
+              <div class="row">
+                <div align="left" class="col">
+                  <strong>Latitude: </strong> 
+                </div>
+                <div align="left" class="col">
+                  <input id="latitude" ng-disabled="addressEnabled" type="textbox" ng-model="latitude">
+                </div>
+              </div>
+
+              <div class="row">
+                <div align="left" class="col">
+                  <strong>Longitude: </strong> 
+                </div>
+                <div align="left" class="col">
+                  <input id="longitude" ng-disabled="addressEnabled" type="textbox" ng-model="longitude">
+                </div>
+              </div>
+
+<!--               <div align="left" class="col">
+                <strong>Latitude: </strong> 
+                <input id="latitude" ng-disabled="addressEnabled" type="textbox" ng-model="latitude">
+              </div>
+     
+              <div align="left" class="col">
+                <strong>Longitude: </strong>
+                <input id="longitude" ng-disabled="addressEnabled" type="textbox" ng-model="longitude">
+              </div>
+ -->     
+              <input id="submit" type="button" value="Search" ng-click="search(choice, address, latitude, longitude)">
+
+        </div>
+
       </div>
 
       <div id="map" data-tap-disabled="true"></div>

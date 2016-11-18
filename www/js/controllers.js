@@ -12,19 +12,44 @@ ionicAppControllers
   //$scope.$on('$ionicView.enter', function(e) {
   //});
 
+ 
+  $scope.addressEnabled = true;
+  $scope.choice = "A";
+  $scope.latitude = '';
+  $scope.longitude = '';
+  $scope.address = '';
+
+
+  $scope.changeRadio = function(choice) {
+
+    if (choice === "A") {
+
+      $scope.latitude = '';
+      $scope.longitude = '';
+      $scope.addressEnabled = true;
+    }
+
+    if (choice === "B") {
+
+      this.address = '';
+      $scope.address = '';
+      $scope.addressEnabled = false;
+    }
+
+  }
+
 
   if (!$rootScope.datamap.address) {
 
     $rootScope.datamap = {
       address: "Sydney, NSW",
-      latitude: -34.397,
-      longitude: 150.644
+      latitude: -34.397, //37.9357576
+      longitude: 150.644 //-122.34774859999999
     };
 
     $localstorage.setObject('datamap', $rootScope.datamap);
 
   }
-
 
 
   var initMap = function() {
@@ -45,55 +70,109 @@ ionicAppControllers
   };
 
 
-  //google.maps.event.addDomListener($window, 'load', initMap);
-
-
   $scope.$on('$ionicView.enter', function(ev) {
     
-    initMap();
-
     // Here your code to run always (example: to refresh data)
-
     if(ev.targetScope !== $scope) return;
-    // Here your code to run once
+
+      // Here your code to run once
+       initMap();
 
   });
 
 
-  $scope.geocodeAddress = function(address) {
+  $scope.search = function(choice, address, latitude, longitude) {
 
-    //var address = document.getElementById('address').value;
+    if (choice === 'A') {
 
-    $scope.geocoder.geocode({'address': address}, function(results, status) {
-      
-      if (status === 'OK') {
-
-        $scope.map.setCenter(results[0].geometry.location);
+      $scope.geocoder.geocode({'address': address}, function(results, status) {
         
-        var marker = new google.maps.Marker({
-          map: $scope.map,
-          position: results[0].geometry.location
+        if (status === 'OK') {
+
+          $scope.map.setCenter(results[0].geometry.location);
+          
+          var marker = new google.maps.Marker({
+            map: $scope.map,
+            position: results[0].geometry.location
+          });
+
+          $scope.$apply(function() {
+
+            $scope.addressEnabled = false;
+            $scope.latitude = results[0].geometry.location.lat();
+            $scope.longitude = results[0].geometry.location.lng();
+
+            $scope.addressEnabled = true;
+            $scope.address = results[0].formatted_address;
+
+            $rootScope.datamap = {
+              address: results[0].formatted_address,
+              latitude: results[0].geometry.location.lat(),
+              longitude: results[0].geometry.location.lng()
+            };
+
+            $localstorage.setObject('datamap', $rootScope.datamap);
+
+          });        
+        
+        } else {
+          alert('Map search was not successful for the following reason: ' + status);
+        }
+      });
+    }
+
+    else {
+
+      if (latitude && longitude) {
+
+        var location = { lat: parseFloat(latitude), lng: parseFloat(longitude) };
+        // var location = { lat: latitude, lng: longitude };
+
+        $scope.geocoder.geocode({'location': location}, function(results, status) {
+          
+          if (status === 'OK') {
+
+            $scope.map.setCenter(results[0].geometry.location);
+
+            //map.setZoom(11);
+            
+            var marker = new google.maps.Marker({
+              map: $scope.map,
+              position: results[0].geometry.location
+            });
+
+            // var newAddress;
+
+            // if (results[1]) {
+            //   newAddress = results[0].formatted_address;
+            // } else {
+            //   newAddress = "No address found";
+            // }
+
+            $scope.$apply(function() {
+
+              $scope.addressEnabled = true;
+              $scope.address = results[0].formatted_address;
+              $scope.addressEnabled = false;
+
+              $rootScope.datamap = {
+                address: results[0].formatted_address,
+                latitude: results[0].geometry.location.lat(),
+                longitude: results[0].geometry.location.lng()
+              };
+
+              $localstorage.setObject('datamap', $rootScope.datamap);
+
+            });        
+          
+          } else {
+            alert('Map search was not successful for the following reason: ' + status);
+          }
         });
-
-        $scope.latitude = results[0].geometry.location.lat();
-        $scope.longitude = results[0].geometry.location.lng();
-
-        $rootScope.datamap = {
-          address: address,
-          latitude: results[0].geometry.location.lat(),
-          longitude: results[0].geometry.location.lng()
-        };
-
-        $localstorage.setObject('datamap', $rootScope.datamap);
-      
-      } else {
-        alert('Geocode was not successful for the following reason: ' + status);
       }
-    });
+    }
   }
-
 })
-
 
 
 .controller('HomeCtrl', function($scope, $ionicSideMenuDelegate, $ionicModal, AuthenticationService, Users) {              
