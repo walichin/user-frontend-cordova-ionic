@@ -4,6 +4,7 @@ ionicAppControllers
 
 
 .controller('MapCtrl', function($rootScope, $scope, $window, $localstorage) {
+//.controller('MapCtrl', function($rootScope, $scope, $window, $localstorage) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -13,26 +14,31 @@ ionicAppControllers
   //});
 
  
-  $scope.addressEnabled = true;
   $scope.choice = "A";
-  $scope.latitude = '';
-  $scope.longitude = '';
-  $scope.address = '';
+  $scope.addressEnabled = true;
 
 
-  $scope.changeRadio = function(choice) {
+  // $scope.addressEnabled = false;
+  // $scope.latitude = '';
+  // $scope.longitude = '';
+  // $scope.addressEnabled = true;
+  // $scope.googleaddress = '';
+
+
+  $scope.setUpChoice = function(choice) {
 
     if (choice === "A") {
 
-      $scope.latitude = '';
-      $scope.longitude = '';
+      this.latitude = '';
+      this.longitude = '';
+      // $scope.latitude = '';
+      // $scope.longitude = '';
       $scope.addressEnabled = true;
-    }
+    
+    } else {
 
-    if (choice === "B") {
-
-      this.address = '';
-      $scope.address = '';
+      this.googleaddress = '';
+      // $scope.googleaddress = '';
       $scope.addressEnabled = false;
     }
 
@@ -42,7 +48,7 @@ ionicAppControllers
   if (!$rootScope.datamap.address) {
 
     $rootScope.datamap = {
-      address: "Sydney, NSW",
+      googleaddress: "Sydney, NSW",
       latitude: -34.397, //37.9357576
       longitude: 150.644 //-122.34774859999999
     };
@@ -63,7 +69,7 @@ ionicAppControllers
     
     $scope.geocoder = new google.maps.Geocoder();
 
-    $scope.address = $rootScope.datamap.address;
+    $scope.googleaddress = $rootScope.datamap.googleaddress;
     $scope.latitude = $rootScope.datamap.latitude;
     $scope.longitude = $rootScope.datamap.longitude;
    
@@ -73,19 +79,24 @@ ionicAppControllers
   $scope.$on('$ionicView.enter', function(ev) {
     
     // Here your code to run always (example: to refresh data)
-    if(ev.targetScope !== $scope) return;
+    console.log('This runs always!');
 
-      // Here your code to run once
-       initMap();
+    // Here your code to run once
+    if(ev.targetScope !== $scope) return;
+      
+      console.log('This runs once');
+      initMap();
 
   });
 
 
-  $scope.search = function(choice, address, latitude, longitude) {
+  $scope.search = function(choice, googleaddress, latitude, longitude) {
+
+    $scope.panel = this;
 
     if (choice === 'A') {
 
-      $scope.geocoder.geocode({'address': address}, function(results, status) {
+      $scope.geocoder.geocode({'address': googleaddress}, function(results, status) {
         
         if (status === 'OK') {
 
@@ -99,14 +110,14 @@ ionicAppControllers
           $scope.$apply(function() {
 
             $scope.addressEnabled = false;
-            $scope.latitude = results[0].geometry.location.lat();
-            $scope.longitude = results[0].geometry.location.lng();
+            $scope.panel.latitude = results[0].geometry.location.lat();
+            $scope.panel.longitude = results[0].geometry.location.lng();
 
             $scope.addressEnabled = true;
-            $scope.address = results[0].formatted_address;
+            $scope.panel.googleaddress = results[0].formatted_address;
 
             $rootScope.datamap = {
-              address: results[0].formatted_address,
+              googleaddress: results[0].formatted_address,
               latitude: results[0].geometry.location.lat(),
               longitude: results[0].geometry.location.lng()
             };
@@ -152,11 +163,14 @@ ionicAppControllers
             $scope.$apply(function() {
 
               $scope.addressEnabled = true;
-              $scope.address = results[0].formatted_address;
+              $scope.panel.googleaddress = results[0].formatted_address;
+
               $scope.addressEnabled = false;
+              $scope.panel.latitude = results[0].geometry.location.lat();
+              $scope.panel.longitude = results[0].geometry.location.lng();
 
               $rootScope.datamap = {
-                address: results[0].formatted_address,
+                googleaddress: results[0].formatted_address,
                 latitude: results[0].geometry.location.lat(),
                 longitude: results[0].geometry.location.lng()
               };
@@ -338,7 +352,7 @@ ionicAppControllers
   $scope.login = function (form) {
       //$scope.dataLoading = true;
 
-      console.log('$scope.username:' + $scope.username);;
+      console.log('$scope.username:' + $scope.username);
 
       AuthenticationService.Login($scope.username, $scope.password, function (response) {
           if (response.code === '1') {

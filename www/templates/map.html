@@ -8,15 +8,15 @@
 
         <div style="background-color:#4992E2;">
 
-              <label class="radio-inline"><input type="radio" name="optradio" ng-model="choice" ng-change="changeRadio(choice)" ng-value="'A'">By address</label>
-              <label class="radio-inline"><input type="radio" name="optradio" ng-model="choice" ng-change="changeRadio(choice)" ng-value="'B'">By coordinates</label>
+              <label class="radio-inline"><input type="radio" name="optradio" ng-model="choice" ng-click="setUpChoice(choice)" ng-value="'A'">By address</label>
+              <label class="radio-inline"><input type="radio" name="optradio" ng-model="choice" ng-click="setUpChoice(choice)" ng-value="'B'">By coordinates</label>
 
               <div class="row">
                 <div align="left" class="col">
                   <strong>Address: </strong> 
                 </div>
                 <div align="left" class="col">
-                  <input id="address" ng-disabled="!addressEnabled" type="textbox" ng-model="address">
+                  <input id="googleaddress" ng-disabled="!addressEnabled" type="textbox" ng-model="googleaddress">
                 </div>
               </div>
      
@@ -48,7 +48,7 @@
                 <input id="longitude" ng-disabled="addressEnabled" type="textbox" ng-model="longitude">
               </div>
  -->     
-              <input id="submit" type="button" value="Search" ng-click="search(choice, address, latitude, longitude)">
+              <input id="submit" type="button" value="Search" ng-click="search(choice, googleaddress, latitude, longitude)">
 
         </div>
 
