@@ -3,6 +3,187 @@ var ionicAppControllers = angular.module('ionicAppControllers', ['ionicAppServic
 ionicAppControllers
 
 
+.controller('UserDetailCtrl', function($scope, $window, $stateParams, Users) {
+  
+  $scope.user = Users.get($stateParams.userId);
+
+  if ($scope.user.is_admin === null || $scope.user.is_admin === '0') {
+    $scope.checked = false;
+  } else {
+    $scope.checked = true;
+  }
+
+
+  $scope.setIsAdmin = function() {
+
+    if ($scope.checked) $scope.user.is_admin = '1';
+    else $scope.user.is_admin = '0';
+  };
+
+  $scope.updateUser = function(form) {
+
+  };
+
+/**** GOOGLE MAPS / UPDATE USER ****/
+
+  $scope.choice = "A";
+  $scope.addressEnabled = true;
+
+  $scope.setUpChoice = function(choice) {
+
+    if (choice === "A") {
+
+      this.user.gps_latitude = '';
+      this.user.gps_longitude = '';
+      $scope.addressEnabled = true;
+    
+    } else {
+
+      this.user.gps_location = '';
+      $scope.addressEnabled = false
+    }
+
+  }
+
+  var initMap = function() {
+
+    if (!$scope.user.gps_latitude || $scope.user.gps_latitude == null || isNaN($scope.user.gps_latitude)) {
+
+      $scope.datamap = {
+        googleaddress: "Sydney, NSW",
+        latitude: -34.397, //37.9357576
+        longitude: 150.644 //-122.34774859999999
+      };
+
+      $scope.user.gps_location = $scope.datamap.googleaddress;
+      $scope.user.gps_latitude = $scope.datamap.latitude;
+      $scope.user.gps_longitude = $scope.datamap.longitude;
+
+    } else {
+
+      $scope.datamap = {
+        googleaddress: $scope.user.gps_location,
+        latitude: $scope.user.gps_latitude,
+        longitude: $scope.user.gps_longitude
+      };
+
+    }
+
+    $scope.map = new google.maps.Map($window.document.getElementById('map'), {
+
+      zoom: 8,
+      center: {lat: $scope.datamap.latitude, lng: $scope.datamap.longitude}
+
+    });
+    
+    $scope.geocoder = new google.maps.Geocoder();
+
+  };
+
+  $scope.$on('$ionicView.enter', function(ev) {
+    
+    // Here your code to run always (example: to refresh data)
+    console.log('This runs always!');
+
+    // Here your code to run once
+    if(ev.targetScope !== $scope) return;
+      
+      console.log('This runs once');
+      initMap();
+
+  });
+
+
+  $scope.search = function(choice, googleaddress, latitude, longitude) {
+
+    $scope.panel = this;
+
+    if (choice === 'A') {
+
+      $scope.geocoder.geocode({'address': googleaddress}, function(results, status) {
+        
+        if (status === 'OK') {
+
+          $scope.map.setCenter(results[0].geometry.location);
+          
+          var marker = new google.maps.Marker({
+            map: $scope.map,
+            position: results[0].geometry.location
+          });
+
+          $scope.$apply(function() {
+
+            $scope.addressEnabled = false;
+            $scope.panel.user.gps_latitude = results[0].geometry.location.lat();
+            $scope.panel.user.gps_longitude = results[0].geometry.location.lng();
+
+            $scope.addressEnabled = true;
+            $scope.panel.user.gps_location = results[0].formatted_address;
+
+            $scope.datamap = {
+              googleaddress: results[0].formatted_address,
+              latitude: results[0].geometry.location.lat(),
+              longitude: results[0].geometry.location.lng()
+            };
+
+          });        
+        
+        } else {
+          alert('Map search was not successful for the following reason: ' + status);
+        }
+      });
+    }
+
+    else {
+
+      if (latitude && longitude) {
+
+        var location = { lat: parseFloat(latitude), lng: parseFloat(longitude) };
+
+        $scope.geocoder.geocode({'location': location}, function(results, status) {
+          
+          if (status === 'OK') {
+
+            $scope.map.setCenter(results[0].geometry.location);
+
+            //map.setZoom(11);
+            
+            var marker = new google.maps.Marker({
+              map: $scope.map,
+              position: results[0].geometry.location
+            });
+
+            $scope.$apply(function() {
+
+              $scope.addressEnabled = true;
+              $scope.panel.user.gps_location = results[0].formatted_address;
+
+              $scope.addressEnabled = false;
+              $scope.panel.user.gps_latitude = results[0].geometry.location.lat();
+              $scope.panel.user.gps_longitude = results[0].geometry.location.lng();
+
+              $scope.datamap = {
+                googleaddress: results[0].formatted_address,
+                latitude: results[0].geometry.location.lat(),
+                longitude: results[0].geometry.location.lng()
+              };
+
+            });        
+          
+          } else {
+            alert('Map search was not successful for the following reason: ' + status);
+          }
+        });
+      }
+    }
+  }
+
+/**** END OF GOOGLE MAPS / UPDATE USER ****/
+
+
+})
+
+
 .controller('MapCtrl', function($rootScope, $scope, $window, $localstorage) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -201,30 +382,6 @@ ionicAppControllers
 })
 
 
-.controller('UserDetailCtrl', function($scope, $stateParams, Users) {
-  
-  $scope.user = Users.get($stateParams.userId);
-
-  if ($scope.user.is_admin === null || $scope.user.is_admin === '0') {
-    $scope.checked = false;
-  } else {
-    $scope.checked = true;
-  }
-
-
-  $scope.setIsAdmin = function() {
-
-    if ($scope.checked) $scope.user.is_admin = '1';
-    else $scope.user.is_admin = '0';
-  };
-
-  $scope.updateUser = function(form) {
-
-  };
-
-})
-
-
 .controller('NewUserCtrl',
   ['$scope', '$window', '$ionicHistory', '$state', '$location', 'Users', function($scope, $window, $ionicHistory, $state, $location, Users) {
   
@@ -285,7 +442,7 @@ ionicAppControllers
 }])
 
 
-.controller('UsersCtrl', function($scope, Users) {
+.controller('UsersCtrl', function($scope, $rootScope, $localstorage, Users) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -302,6 +459,8 @@ ionicAppControllers
     $call.success(function(data) {
       
       $scope.users = data.users;
+      $rootScope.users = data.users;
+      $localstorage.setObject('users', $rootScope.users);
 
     });
 
@@ -311,8 +470,13 @@ ionicAppControllers
   });
 
 
+  // This is not removing yet from database
   $scope.remove = function(user) {
+    
     $scope.users = Users.remove(user);
+    $rootScope.users = $scope.users;
+    $localstorage.setObject('users', $rootScope.users);
+
   };
 
 })

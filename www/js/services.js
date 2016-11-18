@@ -21,11 +21,14 @@ ionicAppServices
 }])
 
 
-.factory('Users', function($http, ENV) {
+.factory('Users', ['$http', '$rootScope', 'ENV', function($http, $rootScope, ENV) {
 
-    var archiveData = {};
+    // var archiveData = {};
 
-    archiveData.users = []; // to keep state
+    // archiveData.users = []; // to keep state
+
+    // $rootScope.archiveData = {};
+    // $rootScope.archiveData.users = [];
 
     return {
         create: function(user, callback) {
@@ -105,12 +108,12 @@ ionicAppServices
                 }
                 }).success(function(data) {
                     
-                    archiveData.users = data.users;
+                    //$rootScope.archiveData.users = data.users;
                     return data;
 
                 }).error(function(data) {
                     
-                    archiveData.users = [];
+                    //$rootScope.archiveData.users = [];
                     data.users = [];
                     return data;
                     
@@ -120,18 +123,18 @@ ionicAppServices
 
         remove: function(user) {
 
-            var users = archiveData.users;
+            var users = $rootScope.users;
 
             users.splice(users.indexOf(user), 1);
 
-            archiveData.users = users;
+            $rootScope.users = users;
 
             return users;
         },
 
         get: function(userId) {
 
-            var users = archiveData.users;
+            var users = $rootScope.users;
             
             for (var i = 0; i < users.length; i++) {
                 if (users[i].user_id === parseInt(userId)) {
@@ -142,9 +145,8 @@ ionicAppServices
         }
 
     };
-
-            
-})
+          
+}])
 
 
 

@@ -2,8 +2,8 @@
       
         <ion-content class="padding">   
           
-          <ion-scroll zooming="true" direction="y" style="height: 500px">
-
+<!--           <ion-scroll zooming="true" direction="y" style="height: 800px">
+ -->
             <div class="list">        
               
               <img class="archive-login" ng-src="{{user.url_photo}}">
@@ -43,39 +43,75 @@
                 </label>
 
 
-                <label class="item item-input">
-                  <span class="input-label">GPS Location</span>
-                  <input type="text" maxlength="100" ng-model="user.gps_location">        
-                </label>
 
-                <label class="item item-input">
-                  <span class="input-label">GPS Latitude</span>
-                  <input type="text" maxlength="30" ng-model="user.gps_latitude">        
-                </label>
+                <div class="item item-input">
 
-                <label class="item item-input">
-                  <span class="input-label">GPS Longitude</span>
-                  <input type="text" maxlength="30" ng-model="user.gps_longitude">        
-                </label>
+                  <div align="center" style="width: 15%;">
 
-                <button type="submit" ng-disabled="formUser.$invalid" class="button button-block button-dark">
-                  Update User
-                </button>
+                    <div class="list list-inset" style="width: 100%;">
+                      <ion-list radio-group>
+                        <ion-radio ng-model="choice" ng-change="setUpChoice(choice)" ng-value="'A'" checked>Search by address</ion-radio>
+                        <ion-radio ng-model="choice" ng-change="setUpChoice(choice)" ng-value="'B'">Search by coordinates</ion-radio>
+                      </ion-list>
+                    </div>
+
+                    <div style="width: 66%;">
+
+                      <button type="button" class="button button-block button-positive" ng-click="search(choice, user.gps_location, user.gps_latitude, user.gps_longitude)">Search</button>
+                    
+<!--                       <button type="submit" ng-click="search(choice, user.gps_location, user.gps_latitude, user.gps_longitude)">
+ -->
+                    </div>
+
+                  </div>
+
+                  <div style="width: 2%;"> </div>
+
+                  <div style="width: 50%;">
+
+                    <label class="item item-input">
+                      <span class="input-label">Address</span>
+                      <input id="googleaddress" ng-disabled="!addressEnabled" maxlength="100" type="text" ng-model="user.gps_location">
+                    </label>
+
+                    <label class="item item-input">
+                      <span class="input-label">Latitude</span>
+                      <input id="latitude" ng-disabled="addressEnabled" maxlength="30" type="text" ng-model="user.gps_latitude">
+                    </label>
+
+                    <label class="item item-input">
+                      <span class="input-label">Longitude</span>
+                      <input id="longitude" ng-disabled="addressEnabled" maxlength="30" type="text" ng-model="user.gps_longitude">
+                    </label>
+
+                  </div>
+
+                </div>
+
+<!--                 <label class="item item-input">
+ -->
+                <div id="map" data-tap-disabled="true"></div>
+
+<!--                 </label>
+ -->
+                <button type="submit" ng-disabled="formUser.$invalid" class="button button-block button-dark">Update User</button>
 
                 <label class="item item-divider">
+
                   <div ng-show="error" class="alert alert-danger">{{error}}<br></div>
                   <span ng-show="formUser.name.$dirty && formUser.name.$error.required" class="help-block">Name is required<br></span>
                   <span ng-show="formUser.username.$dirty && formUser.username.$error.required" class="help-block">Username is required<br></span>
                   <span ng-show="formUser.password.$dirty && formUser.password.$error.required" class="help-block">Password is required<br></span>
                   <span ng-show="formUser.email.$dirty && formUser.email.$error.email" class="help-block">Email is not valid<br></span>
+                
                 </label>
         
               </form>
 
             </div>
 
-          </ion-scroll>
-                
+<!--           </ion-scroll>
+ -->                
         </ion-content>
         
       </ion-view>

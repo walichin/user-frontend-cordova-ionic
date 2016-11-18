@@ -14,6 +14,8 @@ angular.module('ionicApp', [
   //$rootScope.globals = $cookieStore.get('globals') || {};
   $rootScope.globals = $localstorage.getObject('globals') || {};
 
+  $rootScope.users = $localstorage.getObject('users') || {};
+
   $rootScope.datamap = $localstorage.getObject('datamap') || {};
 
   if ($rootScope.globals.currentUser) {

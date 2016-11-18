@@ -2,43 +2,43 @@
 
   <ion-content class="padding">   
     
-    <ion-scroll zooming="true" direction="y" style="height: 500px">
-
+<!--     <ion-scroll zooming="true" direction="y" style="height: 500px">
+ -->
       <div id="floating-panel">
 
         <div style="background-color:#4992E2;">
 
-              <label class="radio-inline"><input type="radio" name="optradio" ng-model="choice" ng-click="setUpChoice(choice)" ng-value="'A'">By address</label>
-              <label class="radio-inline"><input type="radio" name="optradio" ng-model="choice" ng-click="setUpChoice(choice)" ng-value="'B'">By coordinates</label>
+          <label class="radio-inline"><input type="radio" name="optradio" ng-model="choice" ng-click="setUpChoice(choice)" ng-value="'A'">By address</label>
+          <label class="radio-inline"><input type="radio" name="optradio" ng-model="choice" ng-click="setUpChoice(choice)" ng-value="'B'">By coordinates</label>
 
-              <div class="row">
-                <div align="left" class="col">
-                  <strong>Address: </strong> 
-                </div>
-                <div align="left" class="col">
-                  <input id="googleaddress" ng-disabled="!addressEnabled" type="textbox" ng-model="googleaddress">
-                </div>
-              </div>
-     
-              <div class="row">
-                <div align="left" class="col">
-                  <strong>Latitude: </strong> 
-                </div>
-                <div align="left" class="col">
-                  <input id="latitude" ng-disabled="addressEnabled" type="textbox" ng-model="latitude">
-                </div>
-              </div>
+          <div class="row">
+            <div align="left" class="col">
+              <strong>Address: </strong> 
+            </div>
+            <div align="left" class="col">
+              <input id="googleaddress" ng-disabled="!addressEnabled" type="textbox" ng-model="googleaddress">
+            </div>
+          </div>
 
-              <div class="row">
-                <div align="left" class="col">
-                  <strong>Longitude: </strong> 
-                </div>
-                <div align="left" class="col">
-                  <input id="longitude" ng-disabled="addressEnabled" type="textbox" ng-model="longitude">
-                </div>
-              </div>
+          <div class="row">
+            <div align="left" class="col">
+              <strong>Latitude: </strong> 
+            </div>
+            <div align="left" class="col">
+              <input id="latitude" ng-disabled="addressEnabled" type="textbox" ng-model="latitude">
+            </div>
+          </div>
 
-              <input id="submit" type="button" value="Search" ng-click="search(choice, googleaddress, latitude, longitude)">
+          <div class="row">
+            <div align="left" class="col">
+              <strong>Longitude: </strong> 
+            </div>
+            <div align="left" class="col">
+              <input id="longitude" ng-disabled="addressEnabled" type="textbox" ng-model="longitude">
+            </div>
+          </div>
+
+          <input id="submit" type="button" value="Search" ng-click="search(choice, googleaddress, latitude, longitude)">
 
         </div>
 
@@ -46,8 +46,8 @@
 
       <div id="map" data-tap-disabled="true"></div>
       
-    </ion-scroll>
-          
+<!--     </ion-scroll>
+ -->          
   </ion-content>
   
 </ion-view>
