@@ -33,7 +33,7 @@ ionicAppControllers
   }
 
 
-  if (!$rootScope.datamap.address) {
+  if (!$rootScope.datamap.googleaddress) {
 
     $rootScope.datamap = {
       googleaddress: "Sydney, NSW",
